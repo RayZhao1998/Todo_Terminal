@@ -1,38 +1,28 @@
 import os 
-import time
+from todoItem import TodoItem
+import argparse
 
-class TodoItem():
-    
-    def __init__(self, title, endTime):
-        self.title = title
-        self.createdTime = int(time.time())
-        self.endTime = endTime
-        self.haveDone = False
+version  = "beta0.1"
 
-    def Done(self):
-        self.haveDone = True
-
-    def unDone(self):
-        self.haveDone = False
-
-    def editTitle(self, newTitle):
-        self.title = newTitle
-        
-    def editEndTime(self, newEndTime):
-        self.endTime = newEndTime
-        
 class TodoList():
     
     def __init__(self):
         self.todoItems = []
 
     def addItem(self, newTodoItem):
-        self.todoItems.append(newTodoItem)
-
-    
+        self.todoItems.append(newTodoItem)  
 
 def Welcome():
     os.system('clear')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--version", help="show version and exit", action="store_true")
+    parser.add_argument("-a", "--add", help="add a todoitem", action="store_true")
+    parser.add_argument("endtime", action="store_true")
+    args = parser.parse_args()
+    if args.version:
+        print('todolist terminal edition installed version:' + version)
+    elif args.add and args.endtime:
+        print(args.add + " " + args.endtime)
     print("\n\n\n")
     print("|ˉˉˉˉˉˉˉˉˉˉˉ|ˉ| /ˉˉˉˉˉˉˉˉ\ˉ\ |ˉˉˉˉˉˉˉˉ\ˉ\   /ˉˉˉˉˉˉˉˉ\ˉ\ |ˉ|ˉ|         |ˉˉˉˉˉˉˉˉˉˉ|ˉ| /ˉˉˉˉˉˉˉˉˉ|ˉ||ˉˉˉˉˉˉˉˉˉˉˉ|ˉ|")
     print("ˉˉˉˉˉ| |ˉ|ˉˉˉˉˉ/ /ˉTˉˉˉˉ\ \ \| |ˉ|ˉˉˉ\ \ \ / /ˉTˉˉˉˉ\ \ \| | |          ˉˉˉ|  |ˉ|ˉ ˉ / /ˉ/ˉˉˉˉˉˉˉˉˉˉˉˉˉˉ| |ˉ|ˉˉˉˉˉ")
@@ -58,8 +48,9 @@ def AddTodoItem(todoList):
     todoList.addItem(newTodoItem)
     print(newTodoItem.title + "   " + str(newTodoItem.createdTime) + "   " + newTodoItemEndTime + "   " + str(newTodoItem.haveDone))
 
-def ShowTodolist():
-    print("show todolist")
+def ShowTodolist(todoList):
+    for todoitem in todoList.todoItems:
+        print(todoitem.title + " " + str(todoitem.createdTime) + " " + todoitem.endTime + " " + str(todoitem.haveDone))
 
 
 def select(selectedId, todoList):
@@ -71,7 +62,6 @@ def select(selectedId, todoList):
         while True:
             isNext = input("Do you want to add another one?(yes or no)")
             if isNext == "yes":
-                continue
                 AddTodoItem(todoList)
             else:
                 break
@@ -79,7 +69,7 @@ def select(selectedId, todoList):
             Home()
             
     elif selectedId == 2:
-        ShowTodolist()
+        ShowTodolist(todoList)
     else:
         print("wrong command! Please select the correct one!")
 
